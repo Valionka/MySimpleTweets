@@ -13,6 +13,7 @@ import com.codepath.apps.mysimpletweets.R;
 import com.codepath.apps.mysimpletweets.TwitterApplication;
 import com.codepath.apps.mysimpletweets.adapters.TweetsArrayAdapter;
 import com.codepath.apps.mysimpletweets.clients.TwitterClient;
+import com.codepath.apps.mysimpletweets.listeners.EndlessScrollListener;
 import com.codepath.apps.mysimpletweets.models.Tweet;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -37,10 +38,17 @@ public class TimelineActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timeline);
 
-        lvTweets = (ListView) findViewById(R.id.lvTweets);
         tweets = new ArrayList<>();
         aTweets = new TweetsArrayAdapter(this, tweets);
+        lvTweets = (ListView) findViewById(R.id.lvTweets);
         lvTweets.setAdapter(aTweets);
+        lvTweets.setOnScrollListener(new EndlessScrollListener() {
+            @Override
+            public boolean onLoadMore(int page, int totalItemsCount) {
+                populateTimeline();
+                return true;
+            }
+        });
 
         client = TwitterApplication.getRestClient();
 
@@ -76,9 +84,15 @@ public class TimelineActivity extends AppCompatActivity {
     //send API req to populate timeline json and populate the listview
     private void populateTimeline() {
 
-        client.getHomeTimeline(new JsonHttpResponseHandler(){
+        Long sinceId = null;
+        if(tweets.size() > 0) {
+            sinceId = (tweets.get(tweets.size()-1)).getUid();
+        }
+
+        client.getHomeTimeline(sinceId, new JsonHttpResponseHandler(){
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                //aTweets.clear();
                 // deserializer json
                 aTweets.addAll(Tweet.fromJsonArray(response));
                 Log.d("DEBUG", response.toString());

@@ -45,7 +45,6 @@ public class ComposeActivity extends AppCompatActivity {
         getUserInformation();
     }
 
-
     private void getUserInformation() {
         client.getUserCredentials(new JsonHttpResponseHandler() {
 
@@ -56,14 +55,12 @@ public class ComposeActivity extends AppCompatActivity {
                 tvUserName.setText(user.getName());
                 ivProfileImage.setImageResource(android.R.color.transparent);
                 Picasso.with(getContext()).load(user.getProfileUrl()).into(ivProfileImage);
-
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 super.onFailure(statusCode, headers, responseString, throwable);
             }
-
         });
     }
 

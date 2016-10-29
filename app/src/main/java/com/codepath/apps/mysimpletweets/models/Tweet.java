@@ -9,9 +9,6 @@ import java.util.ArrayList;
 
 /**
  * Created by vmiha on 10/28/16.
- *
- *
- *
  */
 
 public class Tweet implements Serializable {
@@ -52,7 +49,6 @@ public class Tweet implements Serializable {
 
         return tweet;
     }
-
 
     public static ArrayList<Tweet> fromJsonArray (JSONArray jsonArray) {
         ArrayList<Tweet> result = new ArrayList<>();

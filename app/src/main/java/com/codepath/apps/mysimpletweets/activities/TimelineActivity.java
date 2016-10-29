@@ -30,6 +30,8 @@ public class TimelineActivity extends AppCompatActivity {
     private ArrayList<Tweet> tweets;
     private ListView lvTweets;
 
+    private final int REQUEST_CODE = 20;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,7 +64,7 @@ public class TimelineActivity extends AppCompatActivity {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 Intent i = new Intent(getApplicationContext(), ComposeActivity.class);
-                startActivity(i);
+                startActivityForResult(i, REQUEST_CODE);
                 return true;
             }
         });
@@ -75,7 +77,6 @@ public class TimelineActivity extends AppCompatActivity {
     private void populateTimeline() {
 
         client.getHomeTimeline(new JsonHttpResponseHandler(){
-            //success
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 // deserializer json
@@ -83,13 +84,20 @@ public class TimelineActivity extends AppCompatActivity {
                 Log.d("DEBUG", response.toString());
             }
 
-            //failure
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                //super.onFailure(statusCode, headers, throwable, errorResponse);
                // Log.d("DEBUG", errorResponse.toString());
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
+            Tweet tweet = (Tweet) data.getExtras().get("tweet");
+            tweets.add(0, tweet);
+            aTweets.notifyDataSetChanged();
+        }
     }
 
 

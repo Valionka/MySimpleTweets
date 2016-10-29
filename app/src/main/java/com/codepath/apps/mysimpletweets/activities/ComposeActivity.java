@@ -1,5 +1,6 @@
 package com.codepath.apps.mysimpletweets.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 import com.codepath.apps.mysimpletweets.R;
 import com.codepath.apps.mysimpletweets.TwitterApplication;
 import com.codepath.apps.mysimpletweets.clients.TwitterClient;
+import com.codepath.apps.mysimpletweets.models.Tweet;
 import com.codepath.apps.mysimpletweets.models.User;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.squareup.picasso.Picasso;
@@ -73,7 +75,11 @@ public class ComposeActivity extends AppCompatActivity {
 
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                    //super.onSuccess(statusCode, headers, response);
+                    Tweet tweet = Tweet.fromJSON(response);
+                    Intent data = new Intent();
+                    data.putExtra("tweet", tweet);
+                    setResult(RESULT_OK, data);
+
                     finish();
                 }
 
@@ -95,7 +101,6 @@ public class ComposeActivity extends AppCompatActivity {
 
         }
     }
-
 
     public void onCancel(View view){
         finish();

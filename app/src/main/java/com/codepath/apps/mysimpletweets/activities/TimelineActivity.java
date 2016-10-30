@@ -77,7 +77,6 @@ public class TimelineActivity extends AppCompatActivity {
             }
         });
 
-
         return true;
     }
 
@@ -112,7 +111,5 @@ public class TimelineActivity extends AppCompatActivity {
             aTweets.notifyDataSetChanged();
         }
     }
-
-
 
 }

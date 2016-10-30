@@ -84,16 +84,15 @@ public class TimelineActivity extends AppCompatActivity {
     //send API req to populate timeline json and populate the listview
     private void populateTimeline() {
 
-        Long sinceId = null;
+        Long tId = null;
         if(tweets.size() > 0) {
-            sinceId = (tweets.get(tweets.size()-1)).getUid();
+            tId = (tweets.get(tweets.size()-1)).getUid();
         }
 
-        client.getHomeTimeline(sinceId, new JsonHttpResponseHandler(){
+        client.getHomeTimeline(tId, new JsonHttpResponseHandler(){
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 //aTweets.clear();
-                // deserializer json
                 aTweets.addAll(Tweet.fromJsonArray(response));
                 Log.d("DEBUG", response.toString());
             }

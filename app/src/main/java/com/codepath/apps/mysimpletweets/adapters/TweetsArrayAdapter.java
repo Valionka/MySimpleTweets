@@ -13,10 +13,14 @@ import com.codepath.apps.mysimpletweets.R;
 import com.codepath.apps.mysimpletweets.models.Tweet;
 import com.squareup.picasso.Picasso;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
-import java.text.ParseException;
+
+import static com.codepath.apps.mysimpletweets.R.id.ivProfileImage;
+import static com.codepath.apps.mysimpletweets.R.id.tvBody;
+import static com.codepath.apps.mysimpletweets.R.id.tvTimeStamp;
 
 /**
  * Created by vmiha on 10/28/16.
@@ -30,24 +34,38 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
         super(context, android.R.layout.simple_list_item_1, tweets);
     }
 
+    private class ViewHolder {
+        ImageView ivProfileImage;
+        TextView tvUserName;
+        TextView tvBody;
+        TextView tvTimeStamp;
+    }
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
         Tweet tweet = getItem(position);
+        ViewHolder viewHolder;
         if(convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_tweet, parent, false);
+
+            viewHolder = new ViewHolder();
+            viewHolder.ivProfileImage = (ImageView) convertView.findViewById(ivProfileImage);
+            viewHolder.tvUserName = (TextView) convertView.findViewById(R.id.tvUserName);
+            viewHolder.tvBody = (TextView) convertView.findViewById(tvBody);
+            viewHolder.tvTimeStamp = (TextView) convertView.findViewById(tvTimeStamp);
+
+            convertView.setTag(viewHolder);
+
+        } else {
+            viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        ImageView ivProfileImage = (ImageView) convertView.findViewById(R.id.ivProfileImage);
-        TextView tvUserName = (TextView) convertView.findViewById(R.id.tvUserName);
-        TextView tvBody = (TextView) convertView.findViewById(R.id.tvBody);
-        TextView tvTimeStamp = (TextView) convertView.findViewById(R.id.tvTimeStamp);
-
-        tvUserName.setText(tweet.getUser().getName());
-        tvBody.setText(tweet.getBody());
-        ivProfileImage.setImageResource(android.R.color.transparent);
-        Picasso.with(getContext()).load(tweet.getUser().getProfileUrl()).into(ivProfileImage);
-        tvTimeStamp.setText(getRelativeTimeAgo(tweet.getCreatedAt()));
+        viewHolder.tvUserName.setText(tweet.getUser().getName());
+        viewHolder.tvBody.setText(tweet.getBody());
+        viewHolder.ivProfileImage.setImageResource(android.R.color.transparent);
+        Picasso.with(getContext()).load(tweet.getUser().getProfileUrl()).into(viewHolder.ivProfileImage);
+        viewHolder.tvTimeStamp.setText(getRelativeTimeAgo(tweet.getCreatedAt()));
 
         return convertView;
 

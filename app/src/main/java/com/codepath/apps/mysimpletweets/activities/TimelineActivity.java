@@ -2,6 +2,7 @@ package com.codepath.apps.mysimpletweets.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -32,11 +33,32 @@ public class TimelineActivity extends AppCompatActivity {
     private ListView lvTweets;
 
     private final int REQUEST_CODE = 20;
+    private SwipeRefreshLayout swipeContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timeline);
+
+        // Lookup and set the swipe container view
+        swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // Your code to refresh the list here.
+                // Make sure you call swipeContainer.setRefreshing(false)
+
+                // once the network request has completed successfully.
+
+                populateTimeline(true);
+            }
+        });
+
+        // Configure the refreshing colors
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
 
         tweets = new ArrayList<>();
         aTweets = new TweetsArrayAdapter(this, tweets);
@@ -45,7 +67,7 @@ public class TimelineActivity extends AppCompatActivity {
         lvTweets.setOnScrollListener(new EndlessScrollListener() {
             @Override
             public boolean onLoadMore(int page, int totalItemsCount) {
-                populateTimeline();
+                populateTimeline(false);
                 return true;
             }
         });
@@ -58,7 +80,7 @@ public class TimelineActivity extends AppCompatActivity {
         // Make sure the toolbar exists in the activity and is not null
         setSupportActionBar(toolbar);
 
-        populateTimeline();
+        populateTimeline(false);
     }
 
     // Menu icons are inflated just as they were with actionbar
@@ -81,24 +103,29 @@ public class TimelineActivity extends AppCompatActivity {
     }
 
     //send API req to populate timeline json and populate the listview
-    private void populateTimeline() {
+    private void populateTimeline(final boolean isRefresh) {
 
         Long tId = null;
-        if(tweets.size() > 0) {
+        if(tweets.size() > 0 && !isRefresh) {
             tId = (tweets.get(tweets.size()-1)).getUid();
         }
 
         client.getHomeTimeline(tId, new JsonHttpResponseHandler(){
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                //aTweets.clear();
+
+                if(isRefresh) {
+                    swipeContainer.setRefreshing(false);
+                    aTweets.clear();
+                }
                 aTweets.addAll(Tweet.fromJsonArray(response));
                 Log.d("DEBUG", response.toString());
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-               // Log.d("DEBUG", errorResponse.toString());
+                Log.d("DEBUG", errorResponse.toString());
+                populateTimeline(isRefresh);
             }
         });
     }

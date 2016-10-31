@@ -86,7 +86,7 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
             e.printStackTrace();
         }
 
-        return relativeDate;
+         return relativeDate;
     }
 
 

@@ -3,7 +3,10 @@ package com.codepath.apps.mysimpletweets.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -32,6 +35,10 @@ public class ComposeActivity extends AppCompatActivity {
     TextView tvUserName;
     EditText tvBody;
 
+    Button tweetButton;
+
+    final int MAX_CHARS = 140;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +47,36 @@ public class ComposeActivity extends AppCompatActivity {
         client = TwitterApplication.getRestClient();
         ivProfileImage = (ImageView) findViewById(R.id.ivProfileImage);
         tvUserName = (TextView) findViewById(R.id.tvName);
+        tvBody = (EditText) findViewById(R.id.tvBody);
+        tweetButton = (Button) findViewById(R.id.tweet);
+        tweetButton.setClickable(false);
+        tweetButton.setAlpha(.5f);
+
+        tvBody.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(s.length() > 0) {
+                    tweetButton.setAlpha(1f);
+                    tweetButton.setClickable(true);
+                } else {
+                    //tweetButton.setBackgroundColor(Color.WHITE);
+                    tweetButton.setAlpha(.2f);
+                    tweetButton.setClickable(false);
+
+                }
+                //Toast.makeText(getContext(), s, Toast.LENGTH_SHORT).show();
+            }
+        });
 
 
         getUserInformation();
@@ -66,7 +103,6 @@ public class ComposeActivity extends AppCompatActivity {
 
     public void onTweet(View view){
 
-        tvBody = (EditText) findViewById(R.id.tvBody);
         if(tvBody.getText().toString().length() != 0) {
             client.postTweet(tvBody.getText().toString(), new JsonHttpResponseHandler() {
 

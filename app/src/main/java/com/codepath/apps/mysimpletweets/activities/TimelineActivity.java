@@ -119,7 +119,7 @@ public class TimelineActivity extends AppCompatActivity {
                     aTweets.clear();
                 }
                 aTweets.addAll(Tweet.fromJsonArray(response));
-                Log.d("DEBUG", response.toString());
+                //Log.d("DEBUG", response.toString());
             }
 
             @Override

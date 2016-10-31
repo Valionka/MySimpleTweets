@@ -77,7 +77,6 @@ public class ComposeActivity extends AppCompatActivity {
                     tweetButton.setAlpha(1f);
                     tweetButton.setClickable(true);
                 } else {
-                    //tweetButton.setBackgroundColor(Color.WHITE);
                     tweetButton.setAlpha(.2f);
                     tweetButton.setClickable(false);
                 }

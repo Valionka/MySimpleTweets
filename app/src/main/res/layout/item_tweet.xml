@@ -15,31 +15,40 @@
         android:layout_marginRight="5dp"
         android:padding="10dp" />
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/ivProfileImage"
-        android:layout_toEndOf="@+id/ivProfileImage"
-        android:id="@+id/tvUserName" />
+        android:orientation="horizontal"
+        android:id="@+id/info"
+        android:layout_toRightOf="@+id/ivProfileImage">
+
+        <TextView
+            android:text="tvUserName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvUserName"
+            android:textStyle="normal|bold" />
+
+        <TextView
+            android:text="tvTimeStamp"
+            android:layout_gravity="top|right"
+            android:gravity="right"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:id="@+id/tvTimeStamp" />
+
+    </LinearLayout>
 
     <TextView
-        android:text="TextView"
+        android:text="tvBody"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/tvBody"
-        android:maxLines="3"
+        android:maxLines="6"
+        android:layout_marginTop="10dp"
         android:ellipsize="end"
-        android:layout_alignBottom="@+id/ivProfileImage"
-        android:layout_toRightOf="@+id/ivProfileImage"
-        android:layout_toEndOf="@+id/ivProfileImage" />
+        android:layout_below="@id/info"
+        android:layout_toRightOf="@+id/ivProfileImage" />
 
-    <TextView
-        android:text="TextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/tvUserName"
-        android:layout_marginLeft="60dp"
-        android:layout_marginStart="60dp"
-        android:id="@+id/tvTimeStamp" />
 </RelativeLayout>

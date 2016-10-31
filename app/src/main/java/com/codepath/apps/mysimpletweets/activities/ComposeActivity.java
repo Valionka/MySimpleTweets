@@ -1,6 +1,7 @@
 package com.codepath.apps.mysimpletweets.activities;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -34,15 +35,19 @@ public class ComposeActivity extends AppCompatActivity {
     ImageView ivProfileImage;
     TextView tvUserName;
     EditText tvBody;
+    TextView charsLeft;
 
     Button tweetButton;
 
-    final int MAX_CHARS = 140;
+    private final int MAX_CHARS = 140;
+    private int remainingChars;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_compose);
+
+        remainingChars = MAX_CHARS;
 
         client = TwitterApplication.getRestClient();
         ivProfileImage = (ImageView) findViewById(R.id.ivProfileImage);
@@ -51,6 +56,9 @@ public class ComposeActivity extends AppCompatActivity {
         tweetButton = (Button) findViewById(R.id.tweet);
         tweetButton.setClickable(false);
         tweetButton.setAlpha(.5f);
+
+        charsLeft = (TextView) findViewById(R.id.charsLeft);
+        charsLeft.setText(String.valueOf(MAX_CHARS));
 
         tvBody.addTextChangedListener(new TextWatcher() {
             @Override
@@ -65,14 +73,21 @@ public class ComposeActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(s.length() > 0) {
+                if(s.length() > 0 && s.length() < MAX_CHARS) {
                     tweetButton.setAlpha(1f);
                     tweetButton.setClickable(true);
                 } else {
                     //tweetButton.setBackgroundColor(Color.WHITE);
                     tweetButton.setAlpha(.2f);
                     tweetButton.setClickable(false);
+                }
 
+                remainingChars = MAX_CHARS - s.length();
+                charsLeft.setText(String.valueOf(remainingChars));
+                if(remainingChars < 0){
+                    charsLeft.setTextColor(Color.RED);
+                } else {
+                    charsLeft.setTextColor(Color.BLACK);
                 }
                 //Toast.makeText(getContext(), s, Toast.LENGTH_SHORT).show();
             }

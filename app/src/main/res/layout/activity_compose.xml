@@ -34,12 +34,21 @@
             android:id="@+id/cancel_action"
             android:onClick="onCancel" />
 
+        <TextView
+            android:text="140"
+            android:gravity="right"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="130dp"
+            android:id="@+id/charsLeft"
+            android:textSize="16sp" />
+
         <Button
             android:text="@string/Tweet"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/tweet"
-            android:layout_marginLeft="150dp"
+            android:layout_marginLeft="5dp"
             android:onClick="onTweet" />
 
 

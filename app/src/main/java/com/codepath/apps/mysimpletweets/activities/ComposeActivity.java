@@ -55,7 +55,7 @@ public class ComposeActivity extends AppCompatActivity {
         tvBody = (EditText) findViewById(R.id.tvBody);
         tweetButton = (Button) findViewById(R.id.tweet);
         tweetButton.setClickable(false);
-        tweetButton.setAlpha(.5f);
+        tweetButton.setAlpha(.2f);
 
         charsLeft = (TextView) findViewById(R.id.charsLeft);
         charsLeft.setText(String.valueOf(MAX_CHARS));

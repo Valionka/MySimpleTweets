@@ -14,7 +14,11 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:weightSum="1">
 
 
     <LinearLayout
@@ -26,14 +30,17 @@
             android:text="@string/Cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/tvName"
-            android:layout_toRightOf="@+id/tvName"
-            android:layout_toEndOf="@+id/tvName"
-            android:layout_marginLeft="43dp"
-            android:layout_marginStart="43dp"
             android:layout_marginBottom="12dp"
             android:id="@+id/cancel_action"
             android:onClick="onCancel" />
+
+        <Button
+            android:text="@string/Tweet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tweet"
+            android:layout_marginLeft="150dp"
+            android:onClick="onTweet" />
 
 
     </LinearLayout>
@@ -68,9 +75,10 @@
     </LinearLayout>
 
     <EditText
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textPersonName"
+        android:inputType="textMultiLine"
+        android:gravity="top|left"
         android:ems="10"
         android:layout_below="@+id/ivProfileImage"
         android:layout_alignParentLeft="true"
@@ -79,20 +87,12 @@
         android:id="@+id/tvBody"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:hint="@string/compose_hint" />
+        android:scrollbars="vertical"
+        android:backgroundTint="@android:color/transparent"
+        android:hint="@string/compose_hint"
+        android:layout_weight="13.29" />
 
     </LinearLayout>
 
-    <Button
-        android:text="@string/Tweet"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/tweet"
-        android:onClick="onTweet"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginRight="38dp"
-        android:layout_marginEnd="38dp" />
 
 </RelativeLayout>

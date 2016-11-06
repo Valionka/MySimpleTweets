@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -13,14 +12,17 @@ import android.view.MenuItem;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.codepath.apps.mysimpletweets.R;
+import com.codepath.apps.mysimpletweets.adapters.SmartFragmentStatePagerAdapter;
 import com.codepath.apps.mysimpletweets.fragments.HomeTimelineFragment;
 import com.codepath.apps.mysimpletweets.fragments.MentionsTimelineFragment;
 import com.codepath.apps.mysimpletweets.fragments.TweetsListFragment;
+import com.codepath.apps.mysimpletweets.models.Tweet;
 
 public class TimelineActivity extends AppCompatActivity {
 
 
     private TweetsListFragment fragmentTweetsList;
+    TweetsPagerAdapter tweetsPagerAdapter;
     private final int REQUEST_CODE = 20;
 
     @Override
@@ -32,19 +34,15 @@ public class TimelineActivity extends AppCompatActivity {
         ViewPager vpPager = (ViewPager) findViewById(R.id.viewpager);
 
         // set the view pager adapter for the pager
-        vpPager.setAdapter(new TweetsPagerAdapter(getSupportFragmentManager()));
+        tweetsPagerAdapter = new TweetsPagerAdapter(getSupportFragmentManager());
+        tweetsPagerAdapter.getItem(0);
+        vpPager.setAdapter(tweetsPagerAdapter);
 
         // find the sliding tabstrip
         PagerSlidingTabStrip tabStrip = (PagerSlidingTabStrip) findViewById(R.id.tabs);
 
-        // attach the tabsreip to the view pager
+        // attach the tabstrip to the view pager
         tabStrip.setViewPager(vpPager);
-
-
-       /* if(savedInstanceState == null) {
-            fragmentTweetsList = (TweetsListFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_timeline);
-        }
-        */
 
         // Find the toolbar view inside the activity layout
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -79,18 +77,22 @@ public class TimelineActivity extends AppCompatActivity {
         return true;
     }
 
-
-   /* @Override
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
             Tweet tweet = (Tweet) data.getExtras().get("tweet");
-            fragmentTweetsList.insert(tweet, 0);
+            // insert newly created tweet into the fragment
+            fragmentTweetsList = (TweetsListFragment) tweetsPagerAdapter.getRegisteredFragment(0);
+            if(fragmentTweetsList != null) {
+                fragmentTweetsList.insert(tweet, 0);
+            }
         }
     }
-    */
+
+
 
     // return order of the fragments int the view pager
-    public class TweetsPagerAdapter extends FragmentPagerAdapter {
+    public class TweetsPagerAdapter extends SmartFragmentStatePagerAdapter {
         private String tabTitles[] = {"Home", "Mentions"};
 
         public TweetsPagerAdapter(FragmentManager fm) {
@@ -110,6 +112,7 @@ public class TimelineActivity extends AppCompatActivity {
         }
 
         // return the tab title
+        @Override
         public CharSequence getPageTitle(int position) {
             return tabTitles[position];
         }

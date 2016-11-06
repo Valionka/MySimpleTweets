@@ -15,6 +15,22 @@ public class User implements Serializable{
     private long id;
     private String screenName;
     private String profileUrl;
+    private String following;
+    private String tagLine;
+
+    public String getTagLine() {
+        return tagLine;
+    }
+
+    public String getFollowers() {
+        return followers;
+    }
+
+    public String getFollowing() {
+        return following;
+    }
+
+    private String followers;
 
     public String getName() {
         return name;
@@ -56,6 +72,10 @@ public class User implements Serializable{
             user.id = json.getLong("id");
             user.screenName = json.getString("screen_name");
             user.profileUrl = json.getString("profile_image_url");
+            user.followers = json.getString("followers_count");
+            user.following = json.getString("friends_count");
+            user.tagLine = json.getString("description");
+
         } catch (JSONException e) {
             e.printStackTrace();
         }

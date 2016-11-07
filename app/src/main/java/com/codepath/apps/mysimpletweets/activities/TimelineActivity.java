@@ -17,8 +17,9 @@ import com.codepath.apps.mysimpletweets.fragments.HomeTimelineFragment;
 import com.codepath.apps.mysimpletweets.fragments.MentionsTimelineFragment;
 import com.codepath.apps.mysimpletweets.fragments.TweetsListFragment;
 import com.codepath.apps.mysimpletweets.models.Tweet;
+import com.codepath.apps.mysimpletweets.models.User;
 
-public class TimelineActivity extends AppCompatActivity {
+public class TimelineActivity extends AppCompatActivity implements TweetsListFragment.ProfileClickListener {
 
 
     private TweetsListFragment fragmentTweetsList;
@@ -35,8 +36,9 @@ public class TimelineActivity extends AppCompatActivity {
 
         // set the view pager adapter for the pager
         tweetsPagerAdapter = new TweetsPagerAdapter(getSupportFragmentManager());
-        tweetsPagerAdapter.getItem(0);
+       // tweetsPagerAdapter.getItem(0);
         vpPager.setAdapter(tweetsPagerAdapter);
+
 
         // find the sliding tabstrip
         PagerSlidingTabStrip tabStrip = (PagerSlidingTabStrip) findViewById(R.id.tabs);
@@ -49,8 +51,6 @@ public class TimelineActivity extends AppCompatActivity {
         // Sets the Toolbar to act as the ActionBar for this Activity window.
         // Make sure the toolbar exists in the activity and is not null
         setSupportActionBar(toolbar);
-
-
     }
 
     public void onProfileView(MenuItem mi) {
@@ -89,6 +89,14 @@ public class TimelineActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onProfileClick(User user) {
+        String screenName = user.getScreenName();
+        Intent i = new Intent(this, ProfileActivity.class);
+        i.putExtra("user", user);
+        startActivity(i);
+
+    }
 
 
     // return order of the fragments int the view pager

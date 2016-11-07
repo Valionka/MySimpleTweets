@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.codepath.apps.mysimpletweets.R;
 import com.codepath.apps.mysimpletweets.models.Tweet;
+import com.codepath.apps.mysimpletweets.models.User;
 import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;
@@ -74,7 +75,7 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
             @Override
             public void onClick(View v) {
                 if(listener != null) {
-                    listener.onProfileImageClick(tweet);
+                    listener.onProfileImageClick(tweet.getUser());
                 }
             }
         });
@@ -104,7 +105,7 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
     }
 
     public interface ProfileImageClickListener {
-        public void onProfileImageClick(Tweet tweet);
+        public void onProfileImageClick(User user);
     }
 
 

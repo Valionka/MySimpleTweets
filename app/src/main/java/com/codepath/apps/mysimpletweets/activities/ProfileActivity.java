@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.codepath.apps.mysimpletweets.R;
 import com.codepath.apps.mysimpletweets.TwitterApplication;
 import com.codepath.apps.mysimpletweets.clients.TwitterClient;
+import com.codepath.apps.mysimpletweets.fragments.TweetsListFragment;
 import com.codepath.apps.mysimpletweets.fragments.UserTimelineFragment;
 import com.codepath.apps.mysimpletweets.models.User;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -20,43 +21,51 @@ import cz.msebera.android.httpclient.Header;
 
 import static com.raizlabs.android.dbflow.config.FlowManager.getContext;
 
-public class ProfileActivity extends AppCompatActivity {
+public class ProfileActivity extends AppCompatActivity implements TweetsListFragment.ProfileClickListener {
 
     TwitterClient client;
     User user;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        client = TwitterApplication.getRestClient();
-        client.getUserCredentials(new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                user = User.fromJson(response);
-                //my current user account
-               // Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-               // toolbar.setTitle(user.getScreenName());
-                populateProfileHeader(user);
-            }
+        if(getIntent().getExtras() == null || (User) getIntent().getExtras().get("user") == null) {
+            client = TwitterApplication.getRestClient();
+            client.getUserCredentials(new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                    user = User.fromJson(response);
+                    //my current user account
+                    // Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+                    // toolbar.setTitle(user.getScreenName());
+                    populateProfileHeader(user);
+                    populateTimline(savedInstanceState, user);
+                }
 
-        });
+            });
+        } else {
+            user = (User) getIntent().getExtras().get("user");
+            populateProfileHeader(user);
+            populateTimline(savedInstanceState, user);
+        }
 
+    }
 
-
+    private void populateTimline(Bundle savedInstanceState, User user) {
         // get the screen name from the activity that launches this
-        String screenName = getIntent().getStringExtra("screen_name");
+        String screenName = user.getScreenName();
+
         if(savedInstanceState == null) {
             // create the user timeline fragment
-            UserTimelineFragment  fragmentUserTimeline = UserTimelineFragment.newInstance("valmihaylov");
+            UserTimelineFragment  fragmentUserTimeline = UserTimelineFragment.newInstance(screenName);
 
             // display the user timline fragment (dynamic way)
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.flContainer, fragmentUserTimeline);
             ft.commit();
         }
-
     }
 
 
@@ -74,6 +83,11 @@ public class ProfileActivity extends AppCompatActivity {
         tvFollowing.setText(user.getFollowing() + " Following");
         ivProfileImage.setImageResource(android.R.color.transparent);
         Picasso.with(getContext()).load(user.getProfileUrl()).into(ivProfileImage);
+    }
+
+    @Override
+    public void onProfileClick(User user) {
+        //do nothing as all already in profile view
     }
 }
 

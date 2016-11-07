@@ -1,5 +1,6 @@
 package com.codepath.apps.mysimpletweets.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -24,11 +25,27 @@ import java.util.List;
 
 public class TweetsListFragment extends Fragment {
 
+    private  ProfileClickListener listener;
     private TweetsArrayAdapter aTweets;
     private SwipeRefreshLayout swipeContainer;
     private ListView lvTweets;
     private List<Tweet> tweets;
 
+
+    public interface ProfileClickListener {
+        public void onProfileClick(User user);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof ProfileClickListener) {
+            listener = (ProfileClickListener) context;
+        } else {
+            throw new ClassCastException(context.toString()
+                    + " must implement TweetsListFragment.ProfileClickListener");
+        }
+    }
 
     //creation lifecycle event
     @Override
@@ -39,9 +56,10 @@ public class TweetsListFragment extends Fragment {
         aTweets.setProfileImageClickListener(new TweetsArrayAdapter.ProfileImageClickListener(){
 
             @Override
-            public void onProfileImageClick(Tweet tweet) {
-                User user = tweet.getUser();
-
+            public void onProfileImageClick(User user) {
+                if(listener != null) {
+                    listener.onProfileClick(user);
+                }
             }
         });
     }

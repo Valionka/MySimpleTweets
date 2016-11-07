@@ -23,7 +23,7 @@ import java.util.List;
  * Created by vmiha on 11/2/16.
  */
 
-public class TweetsListFragment extends Fragment {
+public abstract class TweetsListFragment extends Fragment {
 
     private  ProfileClickListener listener;
     private TweetsArrayAdapter aTweets;
@@ -35,6 +35,8 @@ public class TweetsListFragment extends Fragment {
     public interface ProfileClickListener {
         public void onProfileClick(User user);
     }
+
+    public abstract void populateTimeline(final boolean isRefresh);
 
     @Override
     public void onAttach(Context context) {
@@ -74,7 +76,7 @@ public class TweetsListFragment extends Fragment {
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                //populateTimeline(true);
+                populateTimeline(true);
             }
         });
 
@@ -90,7 +92,7 @@ public class TweetsListFragment extends Fragment {
         lvTweets.setOnScrollListener(new EndlessScrollListener() {
             @Override
             public boolean onLoadMore(int page, int totalItemsCount) {
-                //populateTimeline(false);
+                populateTimeline(false);
                 return true;
             }
         });

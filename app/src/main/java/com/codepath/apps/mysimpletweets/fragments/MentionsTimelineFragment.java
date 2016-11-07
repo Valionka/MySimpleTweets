@@ -30,7 +30,7 @@ public class MentionsTimelineFragment extends TweetsListFragment {
     }
 
     //send API req to populate timeline json and populate the listview
-    private void populateTimeline(final boolean isRefresh) {
+    public void populateTimeline(final boolean isRefresh) {
 
         Long tId = null;
         if(getTweetCount() > 0 && !isRefresh) {

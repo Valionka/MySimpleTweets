@@ -40,7 +40,7 @@ public class UserTimelineFragment extends TweetsListFragment {
     }
 
     //send API req to populate timeline json and populate the listview
-    private void populateTimeline(final boolean isRefresh) {
+    public void populateTimeline(final boolean isRefresh) {
 
 
         client.getUserTimeline(getArguments().getString("screen_name"), new JsonHttpResponseHandler(){

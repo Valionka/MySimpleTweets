@@ -29,9 +29,15 @@ import static com.codepath.apps.mysimpletweets.R.id.tvTimeStamp;
 //taking tweet objects and convert to views
 public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
 
+    private ProfileImageClickListener listener;
+
+    public void setProfileImageClickListener(ProfileImageClickListener listener) {
+        this.listener = listener;
+    }
 
     public TweetsArrayAdapter(Context context, List<Tweet> tweets) {
         super(context, android.R.layout.simple_list_item_1, tweets);
+        this.listener = null;
     }
 
     private class ViewHolder {
@@ -44,7 +50,7 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        Tweet tweet = getItem(position);
+        final Tweet tweet = getItem(position);
         ViewHolder viewHolder;
         if(convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_tweet, parent, false);
@@ -64,6 +70,14 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
         viewHolder.tvUserName.setText(tweet.getUser().getName());
         viewHolder.tvBody.setText(tweet.getBody());
         viewHolder.ivProfileImage.setImageResource(android.R.color.transparent);
+        viewHolder.ivProfileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(listener != null) {
+                    listener.onProfileImageClick(tweet);
+                }
+            }
+        });
         Picasso.with(getContext()).load(tweet.getUser().getProfileUrl()).into(viewHolder.ivProfileImage);
         viewHolder.tvTimeStamp.setText(getRelativeTimeAgo(tweet.getCreatedAt()));
 
@@ -87,6 +101,10 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
         }
 
          return relativeDate;
+    }
+
+    public interface ProfileImageClickListener {
+        public void onProfileImageClick(Tweet tweet);
     }
 
 

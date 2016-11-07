@@ -13,6 +13,7 @@ import com.codepath.apps.mysimpletweets.R;
 import com.codepath.apps.mysimpletweets.adapters.TweetsArrayAdapter;
 import com.codepath.apps.mysimpletweets.listeners.EndlessScrollListener;
 import com.codepath.apps.mysimpletweets.models.Tweet;
+import com.codepath.apps.mysimpletweets.models.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +29,22 @@ public class TweetsListFragment extends Fragment {
     private ListView lvTweets;
     private List<Tweet> tweets;
 
+
+    //creation lifecycle event
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        tweets = new ArrayList<>();
+        aTweets = new TweetsArrayAdapter(getActivity(), tweets);
+        aTweets.setProfileImageClickListener(new TweetsArrayAdapter.ProfileImageClickListener(){
+
+            @Override
+            public void onProfileImageClick(Tweet tweet) {
+                User user = tweet.getUser();
+
+            }
+        });
+    }
 
     // infaltion logic
     @Nullable
@@ -60,14 +77,6 @@ public class TweetsListFragment extends Fragment {
             }
         });
         return v;
-    }
-
-    //creation lifecycle event
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        tweets = new ArrayList<>();
-        aTweets = new TweetsArrayAdapter(getActivity(), tweets);
     }
 
     public void addAll(List<Tweet> tweets) {

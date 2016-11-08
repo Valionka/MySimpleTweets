@@ -25,7 +25,7 @@ import java.util.List;
 
 public abstract class TweetsListFragment extends Fragment {
 
-    private  ProfileClickListener listener;
+    private ProfileClickListener listener;
     private TweetsArrayAdapter aTweets;
     private SwipeRefreshLayout swipeContainer;
     private ListView lvTweets;

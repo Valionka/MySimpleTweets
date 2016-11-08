@@ -9,6 +9,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ListView;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.codepath.apps.mysimpletweets.R;
@@ -25,6 +27,7 @@ public class TimelineActivity extends AppCompatActivity implements TweetsListFra
     private TweetsListFragment fragmentTweetsList;
     TweetsPagerAdapter tweetsPagerAdapter;
     private final int REQUEST_CODE = 20;
+    ViewPager vpPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,13 +35,12 @@ public class TimelineActivity extends AppCompatActivity implements TweetsListFra
         setContentView(R.layout.activity_timeline);
 
         // get the view pager
-        ViewPager vpPager = (ViewPager) findViewById(R.id.viewpager);
+        vpPager = (ViewPager) findViewById(R.id.viewpager);
 
         // set the view pager adapter for the pager
         tweetsPagerAdapter = new TweetsPagerAdapter(getSupportFragmentManager());
        // tweetsPagerAdapter.getItem(0);
         vpPager.setAdapter(tweetsPagerAdapter);
-
 
         // find the sliding tabstrip
         PagerSlidingTabStrip tabStrip = (PagerSlidingTabStrip) findViewById(R.id.tabs);
@@ -85,6 +87,10 @@ public class TimelineActivity extends AppCompatActivity implements TweetsListFra
             fragmentTweetsList = (TweetsListFragment) tweetsPagerAdapter.getRegisteredFragment(0);
             if(fragmentTweetsList != null) {
                 fragmentTweetsList.insert(tweet, 0);
+                vpPager.setCurrentItem(0);
+                View view = fragmentTweetsList.getView();
+                ListView listView = (ListView) view.findViewById(R.id.lvTweets);
+                listView.setSelection(0);
             }
         }
     }

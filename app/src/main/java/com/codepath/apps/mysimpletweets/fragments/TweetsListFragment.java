@@ -30,6 +30,7 @@ public abstract class TweetsListFragment extends Fragment {
     private SwipeRefreshLayout swipeContainer;
     private ListView lvTweets;
     private List<Tweet> tweets;
+    private EndlessScrollListener scrollListener;
 
 
     public interface ProfileClickListener {
@@ -89,13 +90,14 @@ public abstract class TweetsListFragment extends Fragment {
 
         lvTweets = (ListView) v.findViewById(R.id.lvTweets);
         lvTweets.setAdapter(aTweets);
-        lvTweets.setOnScrollListener(new EndlessScrollListener() {
+        scrollListener = new EndlessScrollListener() {
             @Override
             public boolean onLoadMore(int page, int totalItemsCount) {
                 populateTimeline(false);
                 return true;
             }
-        });
+        };
+        lvTweets.setOnScrollListener(scrollListener);
         return v;
     }
 
@@ -121,5 +123,9 @@ public abstract class TweetsListFragment extends Fragment {
 
     public void stopRefresh() {
         swipeContainer.setRefreshing(false);
+    }
+
+    public void resetScrollListener () {
+        scrollListener.resetState();
     }
 }

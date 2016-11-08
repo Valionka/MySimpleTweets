@@ -42,8 +42,12 @@ public class UserTimelineFragment extends TweetsListFragment {
     //send API req to populate timeline json and populate the listview
     public void populateTimeline(final boolean isRefresh) {
 
+        Long tId = null;
+        if(getTweetCount() > 0 && !isRefresh) {
+            tId = (getTweet(getTweetCount() - 1)).getUid();
+        }
 
-        client.getUserTimeline(getArguments().getString("screen_name"), new JsonHttpResponseHandler(){
+        client.getUserTimeline(tId, getArguments().getString("screen_name"), new JsonHttpResponseHandler(){
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
 

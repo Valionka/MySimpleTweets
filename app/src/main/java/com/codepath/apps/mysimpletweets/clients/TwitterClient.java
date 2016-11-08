@@ -51,10 +51,10 @@ public class TwitterClient extends OAuthBaseClient {
 		RequestParams params = new RequestParams();
 		params.put("count", 20);
         if(tId != null) {
-            // fix duplication issue - https://dev.twitter.com/rest/public/timelines#optimizing-max-id-for-environments-with-64-bit-integers
-            long id = tId - 1;
-            params.put("max_id", id);
-        }
+			// fix duplication issue - https://dev.twitter.com/rest/public/timelines#optimizing-max-id-for-environments-with-64-bit-integers
+			long id = tId - 1;
+			params.put("max_id", id);
+		}
 		params.put("format", "json");
 		client.get(apiUrl, params, handler);
 	}
@@ -65,7 +65,7 @@ public class TwitterClient extends OAuthBaseClient {
 		RequestParams params = new RequestParams();
 		params.put("count", 20);
 		if(tId != null) {
-			long id = tId;
+			long id = tId - 1;
 			params.put("max_id", id);
 		}
 		params.put("format", "json");
@@ -88,10 +88,15 @@ public class TwitterClient extends OAuthBaseClient {
     }
 
     // user timeilne
-	public void getUserTimeline(String screenName, AsyncHttpResponseHandler handler) {
+	public void getUserTimeline(Long tId, String screenName, AsyncHttpResponseHandler handler) {
 		String apiUrl = getApiUrl("statuses/user_timeline.json");
 		RequestParams params = new RequestParams();
 		params.put("count", 20);
+		if(tId != null) {
+			// fix duplication issue - https://dev.twitter.com/rest/public/timelines#optimizing-max-id-for-environments-with-64-bit-integers
+			long id = tId - 1;
+			params.put("max_id", id);
+		}
         params.put("screen_name", screenName);
 		client.get(apiUrl, params, handler);
 	}

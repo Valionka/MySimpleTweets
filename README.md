@@ -19,6 +19,11 @@ The following **required** functionality is completed:
  * [X] Profile view includes that user's timeline
 * [X] User can [infinitely paginate](http://guides.codepath.com/android/Endless-Scrolling-with-AdapterViews-and-RecyclerView) any of these timelines (home, mentions, user) by scrolling to the bottom
 
+The following **additional** features are implemented:
+
+* [X] After a tweet the user will be taken to the home timeline even if he was on the mentions timeline and his tweet will be displayed on top
+* [X] Pull to refresh
+
 The following **optional** features are implemented:
 
 * [ ] User can view following / followers list through the profile
@@ -39,9 +44,8 @@ The following **bonus** features are implemented:
 * [ ] On the profile screen, leverage the [CoordinatorLayout](http://guides.codepath.com/android/Handling-Scrolls-with-CoordinatorLayout#responding-to-scroll-events) to [apply scrolling behavior](https://hackmd.io/s/SJyDOCgU) as the user scrolls through the profile timeline.
 * [ ] User can view their direct messages (or send new ones)
 
-The following **additional** features are implemented:
 
-* [ ] List anything else that you can get done to improve the app functionality!
+
 
 ## Video Walkthrough
 
